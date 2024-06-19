@@ -1,6 +1,8 @@
 const inquirer = require("inquirer");
 const fs = require("node:fs");
-const Shape = require("./lib/shapes");
+const {Triangle, Square, Circle} = require("./lib2/shapes2")
+const {makeShape} = require("./lib/shapes");
+const renderSvg = require("./lib2/createSvg");
 
 
 // WHEN I have entered input for all the prompts
@@ -20,7 +22,7 @@ const questions = [
     {type: 'list',
      name: 'shape',
      message: 'Please select the shape you would like to use.',
-     choices: ['circle', 'triangle', 'square']
+     choices: ['Circle', 'Triangle', 'Square']
     },
     {type: 'input',
      name: 'shapeColor',
@@ -40,16 +42,13 @@ function writeToFile(data) {
       });
     
 }
-
-
-
 function init () {
     inquirer
   .prompt(questions)
   .then((res) => {console.log(res)
-    let shape = new Shape(res)
-    console.log(shape)
-    writeToFile(shape.makeShape)
+    // console.log(makeShape(res))
+    let shape = makeShape(res)
+    writeToFile(shape)
   })
   .catch((error) => {
     if (error.isTtyError) {
@@ -60,4 +59,33 @@ function init () {
   });
 }
 
-init()
+function init2 () {
+  inquirer
+.prompt(questions)
+.then((res) => {
+  switch(res.shape){
+    case "Circle": 
+      const circle = new Circle(res.text, res.textColor, res.shapeColor)
+      return circle
+    case "Square":
+      return new Square(res.text, res.textColor, res.shapeColor)
+    case "Triangle":
+      return new Triangle(res.text, res.textColor, res.shapeColor)
+  }
+}).then((shape) =>{
+  // console.log(shape)
+  let renderedShape = renderSvg(shape)
+  console.log(renderedShape)
+   writeToFile(renderedShape)
+
+
+})
+.catch((error) => {
+  if (error.isTtyError) {
+    // Prompt couldn't be rendered in the current environment
+  } else {
+    // Something else went wrong
+  }
+});
+}
+init2()
