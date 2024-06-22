@@ -1,8 +1,8 @@
 const inquirer = require("inquirer");
 const fs = require("node:fs");
-const {Triangle, Square, Circle} = require("./lib2/shapes2")
-const {makeShape} = require("./lib/shapes");
-const renderSvg = require("./lib2/createSvg");
+const {Triangle, Square, Circle} = require("./lib/shapes")
+// const {makeShape} = require("./lib/shapes");
+const renderSvg = require("./lib/createSvg");
 
 
 // WHEN I have entered input for all the prompts
@@ -13,7 +13,7 @@ const renderSvg = require("./lib2/createSvg");
 const questions = [
     {type: 'input',
      name: 'text',
-     message: 'Please input the three letters used for your logo.'   
+     message: 'Please input up to three letters used for your logo.'
     },
     {type: 'input',
      name: 'textColor',
@@ -31,51 +31,62 @@ const questions = [
     
 ]
 
+
 //should run application using imports from lib
 function writeToFile(data) {
     fs.writeFile('logo.svg', data, err => {
         if (err) {
           console.error(err);
         } else {
+          console.log("Generated logo.svg")
           // file written successfully
         }
       });
     
 }
-function init () {
-    inquirer
-  .prompt(questions)
-  .then((res) => {console.log(res)
-    // console.log(makeShape(res))
-    let shape = makeShape(res)
-    writeToFile(shape)
-  })
-  .catch((error) => {
-    if (error.isTtyError) {
-      // Prompt couldn't be rendered in the current environment
-    } else {
-      // Something else went wrong
-    }
-  });
-}
+// function initDeprecated () {
+//     inquirer
+//   .prompt(question)
+//   .then((res) => {console.log(res)
+//     // console.log(makeShape(res))
+//     let shape = makeShape(res)
+//     writeToFile(shape)
+//   })
+//   .catch((error) => {
+//     if (error.isTtyError) {
+//       // Prompt couldn't be rendered in the current environment
+//     } else {
+//       // Something else went wrong
+//     }
+//   });
+// }
 
-function init2 () {
+function init () {
   inquirer
 .prompt(questions)
 .then((res) => {
+  if ((res.text).length > 3){
+    console.log ('should throw error')
+    throw new Error('Letters only accepts up to Three letters')
+  }
+  return res
+})
+.then((res) => {
   switch(res.shape){
     case "Circle": 
-      const circle = new Circle(res.text, res.textColor, res.shapeColor)
-      return circle
+      return new Circle(res.text, res.textColor, res.shapeColor)
     case "Square":
       return new Square(res.text, res.textColor, res.shapeColor)
     case "Triangle":
       return new Triangle(res.text, res.textColor, res.shapeColor)
+    default:
+      console.log('ERROR')
+      //switch to throw an error
   }
 }).then((shape) =>{
   // console.log(shape)
   let renderedShape = renderSvg(shape)
-  console.log(renderedShape)
+  // console.log(renderedShape)
    writeToFile(renderedShape)
 
 
@@ -84,8 +95,10 @@ function init2 () {
   if (error.isTtyError) {
     // Prompt couldn't be rendered in the current environment
   } else {
+    console.log(error)
     // Something else went wrong
   }
 });
 }
-init2()
+
+init()
