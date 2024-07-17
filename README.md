@@ -1,14 +1,19 @@
 # LogoMaker
   [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
   ## Description
+
   creates SVG imagine based on user input
+
   ## VideoWalkthrough
-    [CLICK ME](https://drive.google.com/file/d/11unqdTmuYzt4bdS7Wwj-jGxPwa9Ls_pn/view?usp=sharing)
+
+[CLICK ME](https://drive.google.com/file/d/11unqdTmuYzt4bdS7Wwj-jGxPwa9Ls_pn/view?usp=sharing)
 
   ## Table of Contents
   * [Installation](#Installation)
   * [Usage](#Usage)
+
   ## Examples
+
   ![alt text](assets/circleExample.png)
   ![alt text](assets/TriangleExample.png)
   ![alt text](assets/SquareExample.png)
